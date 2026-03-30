@@ -1,0 +1,36 @@
+import pandas as pd
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+
+# Step 1: Read data
+data = pd.read_csv("C:/Users/saira/OneDrive/Documents/yuva/data.csv")
+
+# Step 2: Analyze data
+total_students = len(data)
+average_marks = data["Marks"].mean()
+highest_marks = data["Marks"].max()
+lowest_marks = data["Marks"].min()
+
+# Step 3: Create PDF
+pdf = canvas.Canvas("report.pdf", pagesize=letter)
+
+pdf.setFont("Helvetica", 14)
+pdf.drawString(200, 750, "Student Marks Report")
+
+pdf.setFont("Helvetica", 12)
+pdf.drawString(100, 700, f"Total Students: {total_students}")
+pdf.drawString(100, 680, f"Average Marks: {average_marks}")
+pdf.drawString(100, 660, f"Highest Marks: {highest_marks}")
+pdf.drawString(100, 640, f"Lowest Marks: {lowest_marks}")
+
+y = 600
+pdf.drawString(100, y, "Student Details:")
+
+y -= 20
+for index, row in data.iterrows():
+    pdf.drawString(120, y, f"{row['Name']} - {row['Marks']}")
+    y -= 20
+
+pdf.save()
+
+print("PDF Report Generated Successfully!")
